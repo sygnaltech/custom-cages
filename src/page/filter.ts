@@ -1,6 +1,65 @@
 
+/*
+ * Page | Filter 
+ */ 
 
-export function loadModels(make: string): void {
+export class FilterPage {
+
+  constructor() {
+  }
+  
+  init() {
+
+    console.log("Filter page init."); 
+
+    // Select all radio buttons within the .dyn-brand elements
+    const radioButtons = document.querySelectorAll('.brands-menu .dyn-brand .w-form-formradioinput.radio-button') as NodeListOf<HTMLInputElement>;
+    
+    console.log("radio buttons", radioButtons); 
+
+    // Iterate over each radio button to add the event listener
+    radioButtons.forEach((radioButton: HTMLInputElement) => {
+        radioButton.addEventListener('change', (event: Event) => { 
+
+            //          alert('foo')
+            console.log(`brand clicked`); 
+
+            // Cast the event target back to an input element to access 'checked'
+            const target = event.target as HTMLInputElement;
+            
+            // Check if the radio button is being selected
+            if (target.checked) {
+                // Navigate to the sibling span to get the brand name
+                // Note: nextElementSibling could be null, so we check for it
+                const brandName: string | null = target.nextElementSibling ? target.nextElementSibling.textContent : '';
+                console.log("Brand selected:", brandName);
+                // Perform your actions with the brandName here
+              
+                if(!brandName) {
+                  console.error('Brand name is null'); 
+                  return;
+                }
+
+                // Clear Models list
+                this.clearModels(); // Assuming clearModels exists and has been properly typed
+                this.loadModels(brandName as string); // Assuming loadModels exists and accepts a string parameter
+              
+            }
+        });
+    });
+                  
+  }
+
+
+  
+  
+
+  
+  
+  
+  
+
+loadModels(make: string): void {
     // Assuming modelsDataSourceElems is an array of HTMLElements
     const modelsDataSourceElems: NodeListOf<HTMLElement> = document.querySelectorAll('[cc-datasource="models"]');
   
@@ -22,19 +81,21 @@ export function loadModels(make: string): void {
             
             console.log(modelName);
             // Assuming createModel is a function that accepts a string and does something with it
-            createModel(modelName);
+            this.createModel(modelName);
           }
         }
       });
     });
   }
   
-  export function createModel(name: string): void {
+  createModel(name: string): void {
     console.log(`creating model - ${name}`);
   
     // Assuming modelsSelectElem and modelsNavElem are already defined somewhere as HTMLElements
-    const modelsSelectElem: HTMLElement | null = document.querySelector('.models-select'); // Update selector as necessary
-    const modelsNavElem: HTMLElement | null = document.querySelector('.models-nav'); // Update selector as necessary
+    // const modelsSelectElem: HTMLElement | null = document.querySelector('.models-select'); // Update selector as necessary
+    // const modelsNavElem: HTMLElement | null = document.querySelector('.models-nav'); // Update selector as necessary
+    const modelsSelectElem: HTMLSelectElement | undefined = (window as any).modelsSelectElem;
+    const modelsNavElem: HTMLElement | undefined = (window as any).modelsNavElem;
   
     if (modelsSelectElem) {
       const option = document.createElement('option');
@@ -62,7 +123,7 @@ export function loadModels(make: string): void {
   
       linkElement.addEventListener('click', event => {
         event.preventDefault();
-        selectModel(name); // Ensure selectModel is also properly typed in TypeScript
+        this.selectModel(name); // Ensure selectModel is also properly typed in TypeScript
       });
     } else {
       console.error('The specific nav element was not found.');
@@ -70,11 +131,17 @@ export function loadModels(make: string): void {
   }
   
 
-  export function selectModel(name: string): void {
+  selectModel(name: string): void {
     // Access the select element; assuming it's globally available
     // Ensure that modelsSelectElem is declared and correctly typed elsewhere in your TypeScript code
     const modelsSelectElem: HTMLSelectElement | undefined = (window as any).modelsSelectElem;
   
+
+
+
+console.log ("selectModel select", modelsSelectElem); 
+
+
     console.log(`selecting model - ${name}`);
   
     if (modelsSelectElem) {
@@ -106,11 +173,17 @@ export function loadModels(make: string): void {
   }
   
 
-  export function clearModels(): void {
+  clearModels(): void {
+
+
+
     // Accessing global elements; ensure they are declared and typed appropriately elsewhere in your TypeScript code
     const modelsSelectElem: HTMLSelectElement | undefined = (window as any).modelsSelectElem;
     const modelsNavElem: HTMLElement | undefined = (window as any).modelsNavElem;
   
+
+console.log ("select elem", modelsSelectElem); 
+
     if (modelsSelectElem) {
       // Clear all existing options
       modelsSelectElem.innerHTML = '';
@@ -126,7 +199,7 @@ export function loadModels(make: string): void {
       modelsSelectElem.appendChild(defaultOption);
   
       // Assuming removeFilterTagByName is correctly typed and declared elsewhere
-      removeFilterTagByName("Model");
+      this.removeFilterTagByName("Model");
   
       console.log('Models cleared');
   
@@ -156,7 +229,7 @@ export function loadModels(make: string): void {
   }
   
   
-function removeFilterTagByName(tagName: string): void {
+  removeFilterTagByName(tagName: string): void {
     // Find all elements that contain the tag text
     const tagElements = document.querySelectorAll<HTMLDivElement>('div[fs-cmsfilter-element="tag-text"]');
   
@@ -172,3 +245,5 @@ function removeFilterTagByName(tagName: string): void {
       }
     });
   }
+
+}
