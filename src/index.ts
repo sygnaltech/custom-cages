@@ -5,11 +5,12 @@
  */
 
  import { FilterPage } from './page/filter';
+import { TestPage } from './page/test';
 import { RouteDispatcher } from './routeDispatcher';
 
 // Global vars
 const SITE_NAME = 'CustomCages';
-const VERSION = 'v0.1.0';
+const VERSION = 'v0.1.1';
 
 // Global object
 window[SITE_NAME] = window[SITE_NAME] || {}; 
@@ -92,6 +93,11 @@ declare global {
             (new FilterPage()).init();
 
         },
+        '/test': () => {
+
+            (new TestPage()).init();
+
+        }
     };
     routeDispatcher.dispatchRoute(); 
 

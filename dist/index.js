@@ -1,10 +1,109 @@
 (() => {
+  // src/dropdown.ts
+  var WebflowDropdown = class {
+    get isOpen() {
+      return this.dropdownListElem.classList.contains("w--open");
+    }
+    constructor(elem) {
+      if (!elem.classList.contains("w-dropdown")) {
+        throw new Error("The provided element is not a Webflow dropdown element.");
+      }
+      this.dropdownElem = elem;
+      const toggleElem = elem.querySelector(".w-dropdown-toggle");
+      const listElem = elem.querySelector(".w-dropdown-list");
+      if (!toggleElem || !listElem) {
+        throw new Error("The dropdown element does not have the required child elements.");
+      }
+      this.dropdownToggleElem = toggleElem;
+      this.dropdownListElem = listElem;
+    }
+    init() {
+    }
+    simulateClickOnElement(elem) {
+      const rect = elem.getBoundingClientRect();
+      const clientX = rect.left + rect.width / 2;
+      const clientY = rect.top + rect.height / 2;
+      console.log("simclick", clientX, clientY);
+      const clickEvent = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX,
+        clientY
+      });
+      document.dispatchEvent(clickEvent);
+    }
+    simulatePointerOnElement(elem) {
+      const rect = elem.getBoundingClientRect();
+      const clientX = rect.left + rect.width / 2;
+      const clientY = rect.top + rect.height / 2;
+      console.log("simclick", clientX, clientY);
+      const clickEvent = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX,
+        clientY
+      });
+      const pointerEventInit = {
+        bubbles: true,
+        cancelable: true,
+        pointerId: 1,
+        width: 1,
+        height: 1,
+        pressure: 0.5,
+        tiltX: 0,
+        tiltY: 0,
+        pointerType: "mouse",
+        isPrimary: true,
+        isTrusted: true,
+        clientX,
+        clientY,
+        screenX: clientX,
+        screenY: clientY + 121
+      };
+      if (this.dropdownToggleElem) {
+        console.log("clicking pointer event");
+        const pointerclick = new PointerEvent("click", pointerEventInit);
+        this.dropdownToggleElem.dispatchEvent(pointerclick);
+      }
+    }
+    click() {
+      this.simulatePointerOnElement(this.dropdownToggleElem);
+    }
+    open() {
+      console.log("state", this.isOpen);
+      if (!this.isOpen) {
+        this.click();
+      }
+    }
+    close() {
+      console.log("close handler");
+      console.log("state", this.isOpen);
+      if (this.isOpen) {
+        this.click();
+      }
+    }
+    toggle() {
+      this.isOpen ? this.close() : this.open();
+    }
+  };
+
   // src/page/filter.ts
   var FilterPage = class {
     constructor() {
     }
     init() {
       console.log("Filter page init.");
+      this.initBrandRadioButtons();
+      const dropdownElement = document.querySelector(".select-model > .w-dropdown");
+      if (dropdownElement) {
+        this.modelDropdown = new WebflowDropdown(dropdownElement);
+      } else {
+        console.error("Model dropdown element not found.");
+      }
+    }
+    initBrandRadioButtons() {
       const radioButtons = document.querySelectorAll(".brands-menu .dyn-brand .w-form-formradioinput.radio-button");
       console.log("radio buttons", radioButtons);
       radioButtons.forEach((radioButton) => {
@@ -66,7 +165,6 @@
         linkElement.textContent = name;
         modelsNavElem.appendChild(linkElement);
         linkElement.addEventListener("click", (event) => {
-          event.preventDefault();
           this.selectModel(name);
         });
       } else {
@@ -75,6 +173,9 @@
     }
     selectModel(name) {
       const modelsSelectElem = window.modelsSelectElem;
+      console.log("closing");
+      console.log(this.modelDropdown);
+      this.modelDropdown.close();
       console.log("selectModel select", modelsSelectElem);
       console.log(`selecting model - ${name}`);
       if (modelsSelectElem) {
@@ -142,6 +243,43 @@
     }
   };
 
+  // src/page/test.ts
+  var TestPage = class {
+    constructor() {
+    }
+    init() {
+      console.log("Test page init.");
+      const dropdownElement = document.querySelector(".select-model > .w-dropdown");
+      if (dropdownElement) {
+        this.modelDropdown = new WebflowDropdown(dropdownElement);
+      } else {
+        console.error("Model dropdown element not found.");
+      }
+      const buttons = document.querySelectorAll("[test]");
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const action = button.getAttribute("test");
+          switch (action) {
+            case "open":
+              console.log("open");
+              this.modelDropdown.open();
+              break;
+            case "close":
+              console.log("close");
+              this.modelDropdown.close();
+              break;
+            case "toggle":
+              console.log("toggle");
+              this.modelDropdown.isOpen ? this.modelDropdown.close() : this.modelDropdown.open();
+              break;
+            default:
+              console.error("Invalid action.");
+          }
+        });
+      });
+    }
+  };
+
   // src/routeDispatcher.ts
   var RouteDispatcher = class {
     constructor() {
@@ -172,7 +310,7 @@
 
   // src/index.ts
   var SITE_NAME = "CustomCages";
-  var VERSION = "v0.1.0";
+  var VERSION = "v0.1.1";
   window[SITE_NAME] = window[SITE_NAME] || {};
   var Rise = window[SITE_NAME];
   window.fsAttributes = window.fsAttributes || [];
@@ -193,6 +331,9 @@
     routeDispatcher.routes = {
       "/categories/roll-cage-kits": () => {
         new FilterPage().init();
+      },
+      "/test": () => {
+        new TestPage().init();
       }
     };
     routeDispatcher.dispatchRoute();
