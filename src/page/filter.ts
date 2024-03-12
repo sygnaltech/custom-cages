@@ -1,9 +1,14 @@
 
 /*
  * Page | Filter 
- */ 
+ */
+import { WebflowDropdown } from "../dropdown";
+
+ 
 
 export class FilterPage {
+
+  modelDropdown: WebflowDropdown; 
 
   constructor() {
   }
@@ -11,6 +16,22 @@ export class FilterPage {
   init() {
 
     console.log("Filter page init."); 
+
+    this.initBrandRadioButtons(); 
+
+    const dropdownElement = document.querySelector('.select-model > .w-dropdown') as HTMLElement;
+    if (dropdownElement) {
+      // Element found, you can work with dropdownElement here
+      this.modelDropdown = new WebflowDropdown(dropdownElement)
+    //  console.log('Dropdown element found:', dropdownElement);
+    } else {
+      console.error('Model dropdown element not found.');
+    }
+
+
+  }
+
+  initBrandRadioButtons() {
 
     // Select all radio buttons within the .dyn-brand elements
     const radioButtons = document.querySelectorAll('.brands-menu .dyn-brand .w-form-formradioinput.radio-button') as NodeListOf<HTMLInputElement>;
@@ -21,8 +42,7 @@ export class FilterPage {
     radioButtons.forEach((radioButton: HTMLInputElement) => {
         radioButton.addEventListener('change', (event: Event) => { 
 
-            //          alert('foo')
-            console.log(`brand clicked`); 
+          console.log(`brand clicked`); 
 
             // Cast the event target back to an input element to access 'checked'
             const target = event.target as HTMLInputElement;
@@ -86,6 +106,11 @@ loadModels(make: string): void {
         }
       });
     });
+  
+    // Re-initialize
+    console.log("re-initializing dropdowns"); 
+    (window as any).Webflow.require('dropdown').ready(); 
+  
   }
   
   createModel(name: string): void {
@@ -122,7 +147,7 @@ loadModels(make: string): void {
       modelsNavElem.appendChild(linkElement);
   
       linkElement.addEventListener('click', event => {
-        event.preventDefault();
+//        event.preventDefault();
         this.selectModel(name); // Ensure selectModel is also properly typed in TypeScript
       });
     } else {
@@ -135,13 +160,12 @@ loadModels(make: string): void {
     // Access the select element; assuming it's globally available
     // Ensure that modelsSelectElem is declared and correctly typed elsewhere in your TypeScript code
     const modelsSelectElem: HTMLSelectElement | undefined = (window as any).modelsSelectElem;
-  
 
+    console.log("closing");
+    console.log(this.modelDropdown); 
+this.modelDropdown.close();
 
-
-console.log ("selectModel select", modelsSelectElem); 
-
-
+    console.log ("selectModel select", modelsSelectElem); 
     console.log(`selecting model - ${name}`);
   
     if (modelsSelectElem) {
