@@ -1,6 +1,7 @@
 
 /*
- * Page | Filter 
+ * Webflow Dropdown Element
+ * used to manipulate the element.  
  */ 
 
 // TESTING:
@@ -57,7 +58,6 @@ export class WebflowDropdown {
     this.dropdownToggleElem = toggleElem as HTMLElement;
     this.dropdownListElem = listElem as HTMLElement;
 
-    // Initialization complete, you can add more logic here if necessary
   }
   
   init() {
