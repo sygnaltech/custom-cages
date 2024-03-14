@@ -141,6 +141,9 @@
           }
         });
       });
+      console.log("re-initializing dropdowns");
+      window.Webflow.require("dropdown").ready();
+      document.dispatchEvent(new Event("readystatechange"));
     }
     createModel(name) {
       console.log(`creating model - ${name}`);

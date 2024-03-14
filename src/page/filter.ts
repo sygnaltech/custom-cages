@@ -109,7 +109,14 @@ loadModels(make: string): void {
   
     // Re-initialize
     console.log("re-initializing dropdowns"); 
+
+    // re-initiate webflow ix2 
+    // https://discourse.webflow.com/t/how-to-change-webflow-animation-properties-with-js/193404/2
+    // (window as any).Webflow && (window as any).Webflow.destroy();
+    // (window as any).Webflow && (window as any).Webflow.ready();
+//    (window as any).Webflow && (window as any).Webflow.require( 'ix2' ).init();
     (window as any).Webflow.require('dropdown').ready(); 
+    document.dispatchEvent( new Event( 'readystatechange' ) );
   
   }
   
@@ -122,6 +129,7 @@ loadModels(make: string): void {
     const modelsSelectElem: HTMLSelectElement | undefined = (window as any).modelsSelectElem;
     const modelsNavElem: HTMLElement | undefined = (window as any).modelsNavElem;
   
+    // Create model in select elem
     if (modelsSelectElem) {
       const option = document.createElement('option');
       option.value = name;
@@ -135,6 +143,7 @@ loadModels(make: string): void {
       console.log('Select element not found');
     }
   
+    // Create model in nav elem
     if (modelsNavElem) {
       const linkElement = document.createElement('a');
       linkElement.href = '#';
@@ -155,7 +164,7 @@ loadModels(make: string): void {
     }
   }
   
-
+  // Handles select events on the model 
   selectModel(name: string): void {
     // Access the select element; assuming it's globally available
     // Ensure that modelsSelectElem is declared and correctly typed elsewhere in your TypeScript code
@@ -164,6 +173,21 @@ loadModels(make: string): void {
     console.log("closing");
     console.log(this.modelDropdown); 
 this.modelDropdown.close();
+
+
+  // // Create the click event
+  // const clickEvent = new MouseEvent('click', {
+  //   bubbles: true,      // The event bubbles up through the DOM
+  //   cancelable: true,   // The event can be canceled
+  //   view: window,       // The event's view is the current window
+  //   clientX: 10,   // The calculated X position
+  //   clientY: 300    // The calculated Y position
+  // });
+
+  // // Dispatch the event from the document to simulate a click at the window level
+  // document.dispatchEvent(clickEvent);
+
+
 
     console.log ("selectModel select", modelsSelectElem); 
     console.log(`selecting model - ${name}`);
