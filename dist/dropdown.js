@@ -69,7 +69,16 @@
       }
     }
     click() {
-      this.simulatePointerOnElement(this.dropdownToggleElem);
+      const mouseDownEvent = new MouseEvent("mousedown", {
+        bubbles: true,
+        cancelable: true
+      });
+      this.dropdownToggleElem.dispatchEvent(mouseDownEvent);
+      const mouseUpEvent = new MouseEvent("mouseup", {
+        bubbles: true,
+        cancelable: true
+      });
+      this.dropdownToggleElem.dispatchEvent(mouseUpEvent);
     }
     open() {
       console.log("state", this.isOpen);

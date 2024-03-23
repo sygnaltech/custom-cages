@@ -164,7 +164,28 @@ const pointerclick = new PointerEvent('click', pointerEventInit);
 
   click(): void {
 
-this.simulatePointerOnElement(this.dropdownToggleElem); 
+//    this.dropdownToggleElem.click();
+
+    // Create the mousedown event
+    const mouseDownEvent = new MouseEvent('mousedown', {
+      bubbles: true, // Allows the event to bubble up the DOM tree
+      cancelable: true, // Allows the event to be cancelable
+    });
+
+    // Dispatch the mousedown event to the element
+    this.dropdownToggleElem.dispatchEvent(mouseDownEvent);
+
+    // Create the mouseup event
+    const mouseUpEvent = new MouseEvent('mouseup', {
+      bubbles: true, // Allows the event to bubble up the DOM tree
+      cancelable: true, // Allows the event to be cancelable
+    });
+
+    // Dispatch the mouseup event to the element
+    this.dropdownToggleElem.dispatchEvent(mouseUpEvent);
+
+
+// this.simulatePointerOnElement(this.dropdownToggleElem); 
 
 //     setTimeout(() => {
 

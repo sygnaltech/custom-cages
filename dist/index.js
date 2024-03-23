@@ -69,7 +69,16 @@
       }
     }
     click() {
-      this.simulatePointerOnElement(this.dropdownToggleElem);
+      const mouseDownEvent = new MouseEvent("mousedown", {
+        bubbles: true,
+        cancelable: true
+      });
+      this.dropdownToggleElem.dispatchEvent(mouseDownEvent);
+      const mouseUpEvent = new MouseEvent("mouseup", {
+        bubbles: true,
+        cancelable: true
+      });
+      this.dropdownToggleElem.dispatchEvent(mouseUpEvent);
     }
     open() {
       console.log("state", this.isOpen);
@@ -105,7 +114,6 @@
     }
     initBrandRadioButtons() {
       const radioButtons = document.querySelectorAll(".brands-menu .dyn-brand .w-form-formradioinput.radio-button");
-      console.log("radio buttons", radioButtons);
       radioButtons.forEach((radioButton) => {
         radioButton.addEventListener("change", (event) => {
           console.log(`brand clicked`);
@@ -167,6 +175,7 @@
         linkElement.setAttribute("aria-selected", "false");
         linkElement.textContent = name;
         modelsNavElem.appendChild(linkElement);
+        console.log("CREATING");
         linkElement.addEventListener("click", (event) => {
           this.selectModel(name);
         });

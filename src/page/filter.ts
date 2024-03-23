@@ -13,6 +13,10 @@ export class FilterPage {
   constructor() {
   }
   
+  /**
+   * Initialize filter page
+   */ 
+
   init() {
 
     console.log("Filter page init."); 
@@ -31,14 +35,18 @@ export class FilterPage {
 
   }
 
+  /**
+   * Init brand radio buttons
+   */
+
   initBrandRadioButtons() {
 
     // Select all radio buttons within the .dyn-brand elements
     const radioButtons = document.querySelectorAll('.brands-menu .dyn-brand .w-form-formradioinput.radio-button') as NodeListOf<HTMLInputElement>;
     
-    console.log("radio buttons", radioButtons); 
+//    console.log("radio buttons", radioButtons); 
 
-    // Iterate over each radio button to add the event listener
+    // Add the change event listener to each rbn
     radioButtons.forEach((radioButton: HTMLInputElement) => {
         radioButton.addEventListener('change', (event: Event) => { 
 
@@ -86,6 +94,7 @@ loadModels(make: string): void {
     const matchingModels: string[] = [];
   
     modelsDataSourceElems.forEach((element: HTMLElement) => {
+
       // Find all child elements with the class 'cms-select-model-type'
       const modelTypes: NodeListOf<HTMLElement> = element.querySelectorAll('.cms-select-model-type');
   
@@ -120,6 +129,7 @@ loadModels(make: string): void {
   
   }
   
+  // Create the model option in the Models select & dropdown 
   createModel(name: string): void {
     console.log(`creating model - ${name}`);
   
@@ -155,6 +165,8 @@ loadModels(make: string): void {
   
       modelsNavElem.appendChild(linkElement);
   
+console.log("CREATING")
+
       linkElement.addEventListener('click', event => {
 //        event.preventDefault();
         this.selectModel(name); // Ensure selectModel is also properly typed in TypeScript
