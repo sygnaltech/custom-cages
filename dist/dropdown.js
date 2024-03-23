@@ -19,55 +19,6 @@
     }
     init() {
     }
-    simulateClickOnElement(elem) {
-      const rect = elem.getBoundingClientRect();
-      const clientX = rect.left + rect.width / 2;
-      const clientY = rect.top + rect.height / 2;
-      console.log("simclick", clientX, clientY);
-      const clickEvent = new MouseEvent("click", {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX,
-        clientY
-      });
-      document.dispatchEvent(clickEvent);
-    }
-    simulatePointerOnElement(elem) {
-      const rect = elem.getBoundingClientRect();
-      const clientX = rect.left + rect.width / 2;
-      const clientY = rect.top + rect.height / 2;
-      console.log("simclick", clientX, clientY);
-      const clickEvent = new MouseEvent("click", {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX,
-        clientY
-      });
-      const pointerEventInit = {
-        bubbles: true,
-        cancelable: true,
-        pointerId: 1,
-        width: 1,
-        height: 1,
-        pressure: 0.5,
-        tiltX: 0,
-        tiltY: 0,
-        pointerType: "mouse",
-        isPrimary: true,
-        isTrusted: true,
-        clientX,
-        clientY,
-        screenX: clientX,
-        screenY: clientY + 121
-      };
-      if (this.dropdownToggleElem) {
-        console.log("clicking pointer event");
-        const pointerclick = new PointerEvent("click", pointerEventInit);
-        this.dropdownToggleElem.dispatchEvent(pointerclick);
-      }
-    }
     click() {
       const mouseDownEvent = new MouseEvent("mousedown", {
         bubbles: true,

@@ -9,28 +9,22 @@
 
 export class WebflowDropdown {
 
-  // Clickable item
+  // Dropdown element parts
 
-// .w-dropdown
+  dropdownElem: HTMLElement; // .w-dropdown
+  dropdownToggleElem: HTMLElement; // .w-dropdown-toggle
+  dropdownListElem: HTMLElement; // .w-dropdown-list
 
-  dropdownElem: HTMLElement;
-  dropdownToggleElem: HTMLElement;
-  dropdownListElem: HTMLElement; 
-
-
-  // Getter to determine if the dropdown is open
+  // Determines if the dropdown is open
   get isOpen(): boolean {
     return this.dropdownListElem.classList.contains('w--open');
   } 
 
 
-// .w-dropdown-toggle
+// This is a typical dropdown element
+// in Webflow 
 
-// Style changes on open too
-// goes on DIV and NAV 
-// .w--open
 /*
-
 <div data-hover="false" data-delay="0" class="w-dropdown" style="">
    <div class="w-dropdown-toggle" id="w-dropdown-toggle-0" aria-controls="w-dropdown-list-0" aria-haspopup="menu" aria-expanded="false" role="button" tabindex="0">
       <div class="w-icon-dropdown-toggle" aria-hidden="true"></div>
@@ -42,13 +36,18 @@ export class WebflowDropdown {
 
   
 
-  constructor(elem: HTMLElement) {
+  constructor(elem: HTMLElement) { 
+
+    // Get the dropdown primary element
     if (!elem.classList.contains('w-dropdown')) {
       throw new Error("The provided element is not a Webflow dropdown element.");
     }
     this.dropdownElem = elem;
 
+    // Get the toggle
     const toggleElem = elem.querySelector('.w-dropdown-toggle');
+
+    // Get the list
     const listElem = elem.querySelector('.w-dropdown-list');
 
     if (!toggleElem || !listElem) {
@@ -59,149 +58,30 @@ export class WebflowDropdown {
     this.dropdownListElem = listElem as HTMLElement;
 
   }
-  
+
   init() {
-
-
                   
   }
 
-// Function to simulate a click event at the position of an element
-simulateClickOnElement(elem: HTMLElement): void {
-  // Get the element's position relative to the viewport
-  const rect = elem.getBoundingClientRect();
-
-
-
-  // Calculate the position for the click
-  // Here we choose the center of the element as the click position
-  const clientX = rect.left + rect.width / 2;
-  const clientY = rect.top + rect.height / 2;
-
-console.log("simclick", clientX, clientY); 
-
-  // Create the click event
-  const clickEvent = new MouseEvent('click', {
-    bubbles: true,      // The event bubbles up through the DOM
-    cancelable: true,   // The event can be canceled
-    view: window,       // The event's view is the current window
-    clientX: clientX,   // The calculated X position
-    clientY: clientY    // The calculated Y position
-  });
-
-  // Dispatch the event from the document to simulate a click at the window level
-  document.dispatchEvent(clickEvent);
-}
-
-simulatePointerOnElement(elem: HTMLElement): void {
-  // Get the element's position relative to the viewport
-  const rect = elem.getBoundingClientRect();
-
-
-
-  // Calculate the position for the click
-  // Here we choose the center of the element as the click position
-  const clientX = rect.left + rect.width / 2;
-  const clientY = rect.top + rect.height / 2;
-
-console.log("simclick", clientX, clientY); 
-
-  // Create the click event
-  const clickEvent = new MouseEvent('click', {
-    bubbles: true,      // The event bubbles up through the DOM
-    cancelable: true,   // The event can be canceled
-    view: window,       // The event's view is the current window
-    clientX: clientX,   // The calculated X position
-    clientY: clientY    // The calculated Y position
-  });
-
-  const pointerEventInit = {
-    bubbles: true,
-    cancelable: true,
-    pointerId: 1,
-    width: 1,
-    height: 1,
-    pressure: 0.5,
-    tiltX: 0,
-    tiltY: 0,
-    pointerType: 'mouse',
-    isPrimary: true,
-    isTrusted: true,
-    clientX: clientX,   // The calculated X position
-    clientY: clientY,    // The calculated Y position
-    screenX: clientX,
-    screenY: clientY + 121 
-  };
-
-  if (this.dropdownToggleElem) { 
-
-console.log("clicking pointer event"); 
-
-const pointerclick = new PointerEvent('click', pointerEventInit);
-
-
-    // const pointerdown = new PointerEvent('pointerdown', pointerEventInit);
-    // const pointerup = new PointerEvent('pointerup', pointerEventInit);
-    // const click = new MouseEvent('click', {
-    //   bubbles: true,
-    //   cancelable: true
-    // });
-    this.dropdownToggleElem.dispatchEvent(pointerclick);
-
-    // this.dropdownToggleElem.dispatchEvent(pointerdown);
-    // this.dropdownToggleElem.dispatchEvent(pointerup);
-    // this.dropdownToggleElem.dispatchEvent(click); // Might still be necessary for full click action simulation
-  }
-
-
-  // Dispatch the event from the document to simulate a click at the window level
-//  document.dispatchEvent(clickEvent);
-// this.dropdownToggleElem.dispatchEvent(clickEvent);
-
-}
-
-
-
   click(): void {
 
-//    this.dropdownToggleElem.click();
+    // To click Webflow's dropdowns,
+    // we must target the toggle element,
+    // and send both a mousedown and mouseup event ( not a click event )
 
-    // Create the mousedown event
+    // Create & dispatch the mousedown event
     const mouseDownEvent = new MouseEvent('mousedown', {
       bubbles: true, // Allows the event to bubble up the DOM tree
       cancelable: true, // Allows the event to be cancelable
     });
-
-    // Dispatch the mousedown event to the element
     this.dropdownToggleElem.dispatchEvent(mouseDownEvent);
 
-    // Create the mouseup event
+    // Create & dispatch the mouseup event
     const mouseUpEvent = new MouseEvent('mouseup', {
       bubbles: true, // Allows the event to bubble up the DOM tree
       cancelable: true, // Allows the event to be cancelable
     });
-
-    // Dispatch the mouseup event to the element
     this.dropdownToggleElem.dispatchEvent(mouseUpEvent);
-
-
-// this.simulatePointerOnElement(this.dropdownToggleElem); 
-
-//     setTimeout(() => {
-
-//       // this.dropdownToggleElem.click();
-//       // console.log("Clicked close after a 1-second delay");
-// //debugger; 
-// console.log(this.dropdownListElem)
-
-//       const event = new MouseEvent('click', {
-//         bubbles: true,
-//         cancelable: true,
-//         view: window,
-//       });
-//       this.dropdownToggleElem.dispatchEvent(event);
-//       console.log("Dispatched custom click event for closing");
-//     }, 3000); // Delay in milliseconds (1000 ms = 1 second)
 
   }
 
@@ -235,7 +115,7 @@ const pointerclick = new PointerEvent('click', pointerEventInit);
       // this.dropdownListElem.classList.remove("w--open");
       // this.dropdownToggleElem.setAttribute("aria-expanded", "false");
       // this.dropdownElem.style.zIndex = '';
-                  this.click(); 
+      this.click(); 
     }
     
 
