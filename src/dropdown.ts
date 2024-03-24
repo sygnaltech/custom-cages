@@ -128,4 +128,21 @@ export class WebflowDropdown {
 
   }
 
+  clear(keepFirstItem: boolean = false): void {
+
+      // Select all direct child anchor elements of the parent element
+      const listItems: NodeListOf<HTMLAnchorElement> = this.dropdownListElem.querySelectorAll('a');
+
+      // Iterate over the NodeList, and optionally keep the first item based on keepFirstItem flag
+      listItems.forEach((anchor, index) => {
+        if (keepFirstItem && index === 0) {
+          // Skip the first item
+        } else {
+          // Delete the anchor element
+          anchor.remove();
+        }
+      });
+
+  }
+
 }

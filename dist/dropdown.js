@@ -47,6 +47,15 @@
     toggle() {
       this.isOpen ? this.close() : this.open();
     }
+    clear(keepFirstItem = false) {
+      const listItems = this.dropdownListElem.querySelectorAll("a");
+      listItems.forEach((anchor, index) => {
+        if (keepFirstItem && index === 0) {
+        } else {
+          anchor.remove();
+        }
+      });
+    }
   };
 })();
 //# sourceMappingURL=dropdown.js.map

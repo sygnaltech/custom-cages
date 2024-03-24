@@ -3,12 +3,15 @@
  * Page | Filter 
  */
 import { WebflowDropdown } from "../dropdown";
+import { WebflowInfoElement } from "../info";
 
  
 
 export class FilterPage {
 
   modelDropdown: WebflowDropdown; 
+  selectedBrandName: WebflowInfoElement;
+  selectedModelName: WebflowInfoElement;
 
   constructor() {
   }
@@ -21,6 +24,12 @@ export class FilterPage {
 
     console.log("Filter page init."); 
 
+    // Get info elements
+    this.selectedBrandName = new WebflowInfoElement("brand-name");
+    this.selectedBrandName.init();
+    this.selectedModelName = new WebflowInfoElement("model-name");
+    this.selectedModelName.init();
+
     this.initBrandRadioButtons(); 
 
     const dropdownElement = document.querySelector('.select-model > .w-dropdown') as HTMLElement;
@@ -32,7 +41,25 @@ export class FilterPage {
       console.error('Model dropdown element not found.');
     }
 
+    // Setup reset click handler
+    // [fs-cmsfilter-element=reset]
+    const resetElements: NodeListOf<Element> = document.querySelectorAll('[fs-cmsfilter-element="reset"]');
+        
+    resetElements.forEach((element: Element) => {
+        element.addEventListener('click', (event: Event) => {
+            this.resetFilter();
+        });
+    });
+  }
 
+  // Does additional filter reset work
+  // for our customized bits 
+  resetFilter() {
+
+    // Clear brand and model name
+    this.selectedBrandName.clear();
+    this.clearModels();  
+    
   }
 
   /**
@@ -68,6 +95,8 @@ export class FilterPage {
                   return;
                 }
 
+                this.selectedBrandName.set(brandName);
+
                 // Clear Models list
                 this.clearModels(); // Assuming clearModels exists and has been properly typed
                 this.loadModels(brandName as string); // Assuming loadModels exists and accepts a string parameter
@@ -88,11 +117,15 @@ export class FilterPage {
   
 
 loadModels(make: string): void {
-    // Assuming modelsDataSourceElems is an array of HTMLElements
+    
     const modelsDataSourceElems: NodeListOf<HTMLElement> = document.querySelectorAll('[cc-datasource="models"]');
   
     const matchingModels: string[] = [];
   
+    // Clear the selected model name
+    // since the list is being rebuilt
+    this.selectedModelName.clear();
+
     modelsDataSourceElems.forEach((element: HTMLElement) => {
 
       // Find all child elements with the class 'cms-select-model-type'
@@ -109,7 +142,8 @@ loadModels(make: string): void {
             matchingModels.push(modelName);
             
             console.log(modelName);
-            // Assuming createModel is a function that accepts a string and does something with it
+            
+            // Create the model in its lists
             this.createModel(modelName);
           }
         }
@@ -182,9 +216,8 @@ console.log("CREATING")
     // Ensure that modelsSelectElem is declared and correctly typed elsewhere in your TypeScript code
     const modelsSelectElem: HTMLSelectElement | undefined = (window as any).modelsSelectElem;
 
-    console.log("closing");
-    console.log(this.modelDropdown); 
-this.modelDropdown.close();
+    // Close the model dropdown
+    this.modelDropdown.close();
 
 
   // // Create the click event
@@ -204,6 +237,9 @@ this.modelDropdown.close();
     console.log ("selectModel select", modelsSelectElem); 
     console.log(`selecting model - ${name}`);
   
+    // Display model name
+    this.selectedModelName.set(name);
+
     if (modelsSelectElem) {
       let found = false; // Flag to indicate if the option is found
       for (let i = 0; i < modelsSelectElem.options.length; i++) {
@@ -232,22 +268,29 @@ this.modelDropdown.close();
     }
   }
   
+  // dropdownClear(): void {
+
+  //   // Empty dropdown except first item
+  //   this.modelDropdown.clear(true);
+
+  // }
 
   clearModels(): void {
-
-
 
     // Accessing global elements; ensure they are declared and typed appropriately elsewhere in your TypeScript code
     const modelsSelectElem: HTMLSelectElement | undefined = (window as any).modelsSelectElem;
     const modelsNavElem: HTMLElement | undefined = (window as any).modelsNavElem;
   
+    // Clear name
+    this.selectedModelName.clear();
+
 
 console.log ("select elem", modelsSelectElem); 
 
     if (modelsSelectElem) {
       // Clear all existing options
       modelsSelectElem.innerHTML = '';
-  
+
       console.log(modelsSelectElem.innerHTML);
   
       // Create the new default option

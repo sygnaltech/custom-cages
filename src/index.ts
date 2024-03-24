@@ -10,24 +10,20 @@ import { RouteDispatcher } from './routeDispatcher';
 
 // Global vars
 const SITE_NAME = 'CustomCages';
-const VERSION = 'v0.1.1';
+const VERSION = 'v0.1.2';
 
 // Global object
 window[SITE_NAME] = window[SITE_NAME] || {}; 
 var Rise = window[SITE_NAME];
 
-
-
 // const modelsDataSourceElems = document.querySelectorAll('[cc-datasource="models"]');
 // var modelsSelectElem = document.querySelector('[fs-cmsfilter-field="Model"]');
 // const modelsNavElem = document.querySelector('.select-model nav');
 
-
-
-  // https://finsweet.com/attributes/api/cms-filter 
+// https://finsweet.com/attributes/api/cms-filter 
 //  window.fsAttributes.cmsfilter.init();
   
-  // Do something with the matching models, like logging them to the console
+// Do something with the matching models, like logging them to the console
 //  console.log(matchingModels);
 
 

@@ -47,6 +47,47 @@
     toggle() {
       this.isOpen ? this.close() : this.open();
     }
+    clear(keepFirstItem = false) {
+      const listItems = this.dropdownListElem.querySelectorAll("a");
+      listItems.forEach((anchor, index) => {
+        if (keepFirstItem && index === 0) {
+        } else {
+          anchor.remove();
+        }
+      });
+    }
+  };
+
+  // src/info.ts
+  var CC_INFO = "cc-info";
+  var WebflowInfoElement = class {
+    constructor(name) {
+      this.default = "";
+      this.valid = false;
+      this.name = name;
+    }
+    init() {
+      if (!this.name) {
+        throw new Error("No name specified.");
+      }
+      const selector = `[${CC_INFO}="${this.name}"]`;
+      const element = document.querySelector(selector);
+      if (element == null) {
+        console.warn("Element with the specified cc-info value not found.");
+        return;
+      }
+      this.infoElem = element;
+      this.default = element.textContent || "";
+      console.log("default is", this.default);
+      this.valid = true;
+    }
+    clear() {
+      this.infoElem.innerText = this.default;
+    }
+    set(text) {
+      console.log("setting text", text);
+      this.infoElem.innerText = text;
+    }
   };
 
   // src/page/filter.ts
@@ -55,6 +96,10 @@
     }
     init() {
       console.log("Filter page init.");
+      this.selectedBrandName = new WebflowInfoElement("brand-name");
+      this.selectedBrandName.init();
+      this.selectedModelName = new WebflowInfoElement("model-name");
+      this.selectedModelName.init();
       this.initBrandRadioButtons();
       const dropdownElement = document.querySelector(".select-model > .w-dropdown");
       if (dropdownElement) {
@@ -62,6 +107,16 @@
       } else {
         console.error("Model dropdown element not found.");
       }
+      const resetElements = document.querySelectorAll('[fs-cmsfilter-element="reset"]');
+      resetElements.forEach((element) => {
+        element.addEventListener("click", (event) => {
+          this.resetFilter();
+        });
+      });
+    }
+    resetFilter() {
+      this.selectedBrandName.clear();
+      this.clearModels();
     }
     initBrandRadioButtons() {
       const radioButtons = document.querySelectorAll(".brands-menu .dyn-brand .w-form-formradioinput.radio-button");
@@ -76,6 +131,7 @@
               console.error("Brand name is null");
               return;
             }
+            this.selectedBrandName.set(brandName);
             this.clearModels();
             this.loadModels(brandName);
           }
@@ -85,6 +141,7 @@
     loadModels(make) {
       const modelsDataSourceElems = document.querySelectorAll('[cc-datasource="models"]');
       const matchingModels = [];
+      this.selectedModelName.clear();
       modelsDataSourceElems.forEach((element) => {
         const modelTypes = element.querySelectorAll(".cms-select-model-type");
         modelTypes.forEach((modelType) => {
@@ -136,11 +193,10 @@
     }
     selectModel(name) {
       const modelsSelectElem = window.modelsSelectElem;
-      console.log("closing");
-      console.log(this.modelDropdown);
       this.modelDropdown.close();
       console.log("selectModel select", modelsSelectElem);
       console.log(`selecting model - ${name}`);
+      this.selectedModelName.set(name);
       if (modelsSelectElem) {
         let found = false;
         for (let i = 0; i < modelsSelectElem.options.length; i++) {
@@ -165,6 +221,7 @@
     clearModels() {
       const modelsSelectElem = window.modelsSelectElem;
       const modelsNavElem = window.modelsNavElem;
+      this.selectedModelName.clear();
       console.log("select elem", modelsSelectElem);
       if (modelsSelectElem) {
         modelsSelectElem.innerHTML = "";
