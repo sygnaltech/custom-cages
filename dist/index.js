@@ -58,6 +58,27 @@
     }
   };
 
+  // src/fs-filter-utils.ts
+  var FSFilterUtils = class {
+    constructor(elem) {
+    }
+    init() {
+    }
+    refresh() {
+    }
+    static removeFilterTagByName(tagName) {
+      const tagElements = document.querySelectorAll('div[fs-cmsfilter-element="tag-text"]');
+      tagElements.forEach((element) => {
+        if (element.textContent && element.textContent.includes(tagName)) {
+          const closeIcon = element.closest('div[fs-cmsfilter-element="tag-template"]')?.querySelector('img[fs-cmsfilter-element="tag-remove"]');
+          if (closeIcon) {
+            closeIcon.click();
+          }
+        }
+      });
+    }
+  };
+
   // src/info.ts
   var CC_INFO = "cc-info";
   var WebflowInfoElement = class {
@@ -139,6 +160,7 @@
       });
     }
     loadModels(make) {
+      make = make.toLowerCase().replace(/\s+/g, "-");
       const modelsDataSourceElems = document.querySelectorAll('[cc-datasource="models"]');
       const matchingModels = [];
       this.selectedModelName.clear();
@@ -146,7 +168,12 @@
         const modelTypes = element.querySelectorAll(".cms-select-model-type");
         modelTypes.forEach((modelType) => {
           const modelMake = modelType.querySelector(".data_model-make");
-          if (modelMake && modelMake.textContent && modelMake.textContent.trim().toLowerCase() === make.toLowerCase()) {
+          if (!(modelMake && modelMake.textContent))
+            return;
+          const matchMakeID = modelMake.textContent.trim().toLowerCase().replace(/\s+/g, "-");
+          console.log("matching", matchMakeID, make.toLowerCase());
+          if (matchMakeID === make.toLowerCase()) {
+            console.log("MATCHED");
             const modelNameElem = modelType.querySelector(".model-name");
             if (modelNameElem && modelNameElem.textContent) {
               let modelName = modelNameElem.textContent.trim();
@@ -222,7 +249,7 @@
       const modelsSelectElem = window.modelsSelectElem;
       const modelsNavElem = window.modelsNavElem;
       this.selectedModelName.clear();
-      console.log("select elem", modelsSelectElem);
+      console.log("Models select elem", modelsSelectElem);
       if (modelsSelectElem) {
         modelsSelectElem.innerHTML = "";
         console.log(modelsSelectElem.innerHTML);
@@ -230,7 +257,7 @@
         defaultOption.value = "";
         defaultOption.textContent = "Select Model...";
         modelsSelectElem.appendChild(defaultOption);
-        this.removeFilterTagByName("Model");
+        FSFilterUtils.removeFilterTagByName("Model");
         console.log("Models cleared");
       } else {
         console.log("Select element not found");
@@ -249,17 +276,6 @@
       } else {
         console.log("Nav element not found");
       }
-    }
-    removeFilterTagByName(tagName) {
-      const tagElements = document.querySelectorAll('div[fs-cmsfilter-element="tag-text"]');
-      tagElements.forEach((element) => {
-        if (element.textContent && element.textContent.includes(tagName)) {
-          const closeIcon = element.closest('div[fs-cmsfilter-element="tag-template"]')?.querySelector('img[fs-cmsfilter-element="tag-remove"]');
-          if (closeIcon) {
-            closeIcon.click();
-          }
-        }
-      });
     }
   };
 
@@ -330,7 +346,7 @@
 
   // src/index.ts
   var SITE_NAME = "CustomCages";
-  var VERSION = "v0.1.1";
+  var VERSION = "v0.1.3";
   window[SITE_NAME] = window[SITE_NAME] || {};
   var Rise = window[SITE_NAME];
   window.fsAttributes = window.fsAttributes || [];

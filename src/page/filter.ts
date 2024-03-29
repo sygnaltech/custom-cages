@@ -3,6 +3,7 @@
  * Page | Filter 
  */
 import { WebflowDropdown } from "../dropdown";
+import { FSFilterUtils } from "../fs-filter-utils";
 import { WebflowInfoElement } from "../info";
 
  
@@ -117,8 +118,15 @@ export class FilterPage {
   
 
 loadModels(make: string): void {
-    
-    const modelsDataSourceElems: NodeListOf<HTMLElement> = document.querySelectorAll('[cc-datasource="models"]');
+
+    // Normalize make to a slug-compatible identifier
+    // Lowercase, spaces-to-hyphens
+    make = make.toLowerCase().replace(/\s+/g, '-');
+//    console.log("MATCH TO", make);
+  
+    // Load data source "models"
+    const modelsDataSourceElems: NodeListOf<HTMLElement> = 
+      document.querySelectorAll('[cc-datasource="models"]');
   
     const matchingModels: string[] = [];
   
@@ -134,7 +142,17 @@ loadModels(make: string): void {
       modelTypes.forEach((modelType: HTMLElement) => {
         // Check if this modelType has a child with class 'data_model-make' that matches the make parameter
         const modelMake: HTMLElement | null = modelType.querySelector('.data_model-make');
-        if (modelMake && modelMake.textContent && modelMake.textContent.trim().toLowerCase() === make.toLowerCase()) {
+
+        if (!(modelMake && modelMake.textContent))
+          return;
+
+        const matchMakeID = modelMake.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+        console.log("matching", matchMakeID, make.toLowerCase());
+
+        if (matchMakeID === make.toLowerCase()) {
+
+          console.log("MATCHED")
+
           // If a matching model make is found, collect the model's name
           const modelNameElem: HTMLElement | null = modelType.querySelector('.model-name');
           if (modelNameElem && modelNameElem.textContent) {
@@ -285,7 +303,7 @@ console.log("CREATING")
     this.selectedModelName.clear();
 
 
-console.log ("select elem", modelsSelectElem); 
+console.log ("Models select elem", modelsSelectElem); 
 
     if (modelsSelectElem) {
       // Clear all existing options
@@ -302,7 +320,8 @@ console.log ("select elem", modelsSelectElem);
       modelsSelectElem.appendChild(defaultOption);
   
       // Assuming removeFilterTagByName is correctly typed and declared elsewhere
-      this.removeFilterTagByName("Model");
+//      this.removeFilterTagByName("Model");
+      FSFilterUtils.removeFilterTagByName("Model");
   
       console.log('Models cleared');
   
@@ -332,21 +351,21 @@ console.log ("select elem", modelsSelectElem);
   }
   
   
-  removeFilterTagByName(tagName: string): void {
-    // Find all elements that contain the tag text
-    const tagElements = document.querySelectorAll<HTMLDivElement>('div[fs-cmsfilter-element="tag-text"]');
+  // removeFilterTagByName(tagName: string): void {
+  //   // Find all elements that contain the tag text
+  //   const tagElements = document.querySelectorAll<HTMLDivElement>('div[fs-cmsfilter-element="tag-text"]');
   
-    tagElements.forEach(element => {
-      // Check if the current element's text includes the tagName
-      if (element.textContent && element.textContent.includes(tagName)) {
-        // Find the close icon in the same tag-template parent
-        const closeIcon = element.closest('div[fs-cmsfilter-element="tag-template"]')?.querySelector<HTMLImageElement>('img[fs-cmsfilter-element="tag-remove"]');
-        if (closeIcon) {
-          // Trigger a click event on the close icon
-          closeIcon.click();
-        }
-      }
-    });
-  }
+  //   tagElements.forEach(element => {
+  //     // Check if the current element's text includes the tagName
+  //     if (element.textContent && element.textContent.includes(tagName)) {
+  //       // Find the close icon in the same tag-template parent
+  //       const closeIcon = element.closest('div[fs-cmsfilter-element="tag-template"]')?.querySelector<HTMLImageElement>('img[fs-cmsfilter-element="tag-remove"]');
+  //       if (closeIcon) {
+  //         // Trigger a click event on the close icon
+  //         closeIcon.click();
+  //       }
+  //     }
+  //   });
+  // }
 
 }
