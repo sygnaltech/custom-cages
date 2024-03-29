@@ -63,6 +63,6 @@ export function convertToPixels(value: string, contextElement: HTMLElement = doc
 /*
 // Example usage:
 const pixelValue = convertToPixels("10vh");
-console.log(pixelValue);
+window.debug.log(pixelValue);
 */
 

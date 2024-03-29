@@ -25,7 +25,7 @@ var Rise = window[SITE_NAME];
 //  window.fsAttributes.cmsfilter.init();
   
 // Do something with the matching models, like logging them to the console
-//  console.log(matchingModels);
+//  window.debug.log(matchingModels);
 
 
 
@@ -55,8 +55,8 @@ window.fsAttributes = window.fsAttributes || [];
 window.fsAttributes.push([
   'cmsfilter',
   (filterInstances: any[]) => { // Assuming 'any[]' for filterInstances type, adjust as known
-    console.log('cmsfilter Successfully loaded!');
-    console.log(filterInstances);
+    window.debug.log('cmsfilter Successfully loaded!');
+    window.debug.log(filterInstances);
     
     // Assuming you want to store the first instance globally on the window object
     // First, extend the Window interface to include filterInstance
@@ -88,7 +88,7 @@ declare global {
 
 function init(): void {
 
-  window.debug = new Sa5Debug();
+  window.debug = new Sa5Debug(); 
   window.debug.enabled = true;
 
   window.debug.log(`${SITE_NAME} package init ${VERSION}`);

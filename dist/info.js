@@ -25,14 +25,14 @@
       }
       this.infoElem = element;
       this.default = element.textContent || "";
-      console.log("default is", this.default);
+      window.debug.log("default is", this.default);
       this.valid = true;
     }
     clear() {
       this.infoElem.innerText = this.default;
     }
     set(text) {
-      console.log("setting text", text);
+      window.debug.log("setting text", text);
       this.infoElem.innerText = text;
     }
   };

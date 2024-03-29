@@ -85,14 +85,14 @@
       this.dropdownToggleElem.dispatchEvent(mouseUpEvent);
     }
     open() {
-      console.log("state", this.isOpen);
+      window.debug.log("state", this.isOpen);
       if (!this.isOpen) {
         this.click();
       }
     }
     close() {
-      console.log("close handler");
-      console.log("state", this.isOpen);
+      window.debug.log("close handler");
+      window.debug.log("state", this.isOpen);
       if (this.isOpen) {
         this.click();
       }
@@ -156,14 +156,14 @@
       }
       this.infoElem = element;
       this.default = element.textContent || "";
-      console.log("default is", this.default);
+      window.debug.log("default is", this.default);
       this.valid = true;
     }
     clear() {
       this.infoElem.innerText = this.default;
     }
     set(text) {
-      console.log("setting text", text);
+      window.debug.log("setting text", text);
       this.infoElem.innerText = text;
     }
   };
@@ -173,7 +173,7 @@
     constructor() {
     }
     init() {
-      console.log("Filter page init.");
+      window.debug.log("Filter page init.");
       this.selectedBrandName = new WebflowInfoElement("brand-name");
       this.selectedBrandName.init();
       this.selectedModelName = new WebflowInfoElement("model-name");
@@ -200,11 +200,11 @@
       const radioButtons = document.querySelectorAll(".brands-menu .dyn-brand .w-form-formradioinput.radio-button");
       radioButtons.forEach((radioButton) => {
         radioButton.addEventListener("change", (event) => {
-          console.log(`brand clicked`);
+          window.debug.log(`brand clicked`);
           const target = event.target;
           if (target.checked) {
             const brandName = target.nextElementSibling ? target.nextElementSibling.textContent : "";
-            console.log("Brand selected:", brandName);
+            window.debug.log("Brand selected:", brandName);
             if (!brandName) {
               console.error("Brand name is null");
               return;
@@ -228,24 +228,24 @@
           if (!(modelMake && modelMake.textContent))
             return;
           const matchMakeID = modelMake.textContent.trim().toLowerCase().replace(/\s+/g, "-");
-          console.log("matching", matchMakeID, make.toLowerCase());
+          window.debug.log("matching", matchMakeID, make.toLowerCase());
           if (matchMakeID === make.toLowerCase()) {
-            console.log("MATCHED");
+            window.debug.log("MATCHED");
             const modelNameElem = modelType.querySelector(".model-name");
             if (modelNameElem && modelNameElem.textContent) {
               let modelName = modelNameElem.textContent.trim();
               matchingModels.push(modelName);
-              console.log(modelName);
+              window.debug.log(modelName);
               this.createModel(modelName);
             }
           }
         });
       });
-      console.log("re-initializing dropdowns");
+      window.debug.log("re-initializing dropdowns");
       WebflowDropdown.initWebflowJS();
     }
     createModel(name) {
-      console.log(`creating model - ${name}`);
+      window.debug.log(`creating model - ${name}`);
       const modelsSelectElem = window.modelsSelectElem;
       const modelsNavElem = window.modelsNavElem;
       if (modelsSelectElem) {
@@ -253,9 +253,9 @@
         option.value = name;
         option.textContent = name;
         modelsSelectElem.appendChild(option);
-        console.log("Model option created");
+        window.debug.log("Model option created");
       } else {
-        console.log("Select element not found");
+        window.debug.log("Select element not found");
       }
       if (modelsNavElem) {
         const linkElement = document.createElement("a");
@@ -266,7 +266,7 @@
         linkElement.setAttribute("aria-selected", "false");
         linkElement.textContent = name;
         modelsNavElem.appendChild(linkElement);
-        console.log("CREATING");
+        window.debug.log("CREATING");
         linkElement.addEventListener("click", (event) => {
           this.selectModel(name);
         });
@@ -277,8 +277,8 @@
     selectModel(name) {
       const modelsSelectElem = window.modelsSelectElem;
       this.modelDropdown.close();
-      console.log("selectModel select", modelsSelectElem);
-      console.log(`selecting model - ${name}`);
+      window.debug.log("selectModel select", modelsSelectElem);
+      window.debug.log(`selecting model - ${name}`);
       this.selectedModelName.set(name);
       if (modelsSelectElem) {
         let found = false;
@@ -290,12 +290,12 @@
             changeEvent = new Event("input", { bubbles: true, cancelable: true });
             modelsSelectElem.dispatchEvent(changeEvent);
             found = true;
-            console.log(`Model '${name}' selected.`);
+            window.debug.log(`Model '${name}' selected.`);
             break;
           }
         }
         if (!found) {
-          console.log(`Model '${name}' not found in the select options.`);
+          window.debug.log(`Model '${name}' not found in the select options.`);
         }
       } else {
         console.error("modelsSelectElem is not defined on window.");
@@ -305,18 +305,18 @@
       const modelsSelectElem = window.modelsSelectElem;
       const modelsNavElem = window.modelsNavElem;
       this.selectedModelName.clear();
-      console.log("Models select elem", modelsSelectElem);
+      window.debug.log("Models select elem", modelsSelectElem);
       if (modelsSelectElem) {
         modelsSelectElem.innerHTML = "";
-        console.log(modelsSelectElem.innerHTML);
+        window.debug.log(modelsSelectElem.innerHTML);
         const defaultOption = document.createElement("option");
         defaultOption.value = "";
         defaultOption.textContent = "Select Model...";
         modelsSelectElem.appendChild(defaultOption);
         FSFilterUtils.removeFilterTagByName("Model");
-        console.log("Models cleared");
+        window.debug.log("Models cleared");
       } else {
-        console.log("Select element not found");
+        window.debug.log("Select element not found");
       }
       if (modelsNavElem) {
         const links = modelsNavElem.querySelectorAll("a");
@@ -330,7 +330,7 @@
         linkElement.textContent = "Select Model...";
         modelsNavElem.appendChild(linkElement);
       } else {
-        console.log("Nav element not found");
+        window.debug.log("Nav element not found");
       }
     }
   };
@@ -340,7 +340,7 @@
     constructor() {
     }
     init() {
-      console.log("Test page init.");
+      window.debug.log("Test page init.");
       const dropdownElement = document.querySelector(".select-model > .w-dropdown");
       if (dropdownElement) {
         this.modelDropdown = new WebflowDropdown(dropdownElement);
@@ -353,15 +353,15 @@
           const action = button.getAttribute("test");
           switch (action) {
             case "open":
-              console.log("open");
+              window.debug.log("open");
               this.modelDropdown.open();
               break;
             case "close":
-              console.log("close");
+              window.debug.log("close");
               this.modelDropdown.close();
               break;
             case "toggle":
-              console.log("toggle");
+              window.debug.log("toggle");
               this.modelDropdown.isOpen ? this.modelDropdown.close() : this.modelDropdown.open();
               break;
             default:
@@ -395,7 +395,7 @@
       if (handler) {
         handler();
       } else {
-        console.log("No specific function for this path.");
+        window.debug.log("No specific function for this path.");
       }
     }
   };
@@ -409,8 +409,8 @@
   window.fsAttributes.push([
     "cmsfilter",
     (filterInstances) => {
-      console.log("cmsfilter Successfully loaded!");
-      console.log(filterInstances);
+      window.debug.log("cmsfilter Successfully loaded!");
+      window.debug.log(filterInstances);
       [window.filterInstance] = filterInstances;
     }
   ]);

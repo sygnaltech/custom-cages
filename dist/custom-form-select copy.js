@@ -32,14 +32,14 @@
       this.dropdownToggleElem.dispatchEvent(mouseUpEvent);
     }
     open() {
-      console.log("state", this.isOpen);
+      window.debug.log("state", this.isOpen);
       if (!this.isOpen) {
         this.click();
       }
     }
     close() {
-      console.log("close handler");
-      console.log("state", this.isOpen);
+      window.debug.log("close handler");
+      window.debug.log("state", this.isOpen);
       if (this.isOpen) {
         this.click();
       }

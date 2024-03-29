@@ -13,15 +13,15 @@ export interface Routes {
 // Example routes
 const routes: Routes = {
     '/': () => {
-        console.log('This is the homepage.');
+        window.debug.log('This is the homepage.');
         // Your function for the homepage
     },
     '/about': () => {
-        console.log('This is the about page.');
+        window.debug.log('This is the about page.');
         // Your function for the about page
     },
     '/contact/*': () => {
-        console.log('This is the contact page.');
+        window.debug.log('This is the contact page.');
         // Your function for the contact page
     },
     // ... add more routes as needed
@@ -57,7 +57,7 @@ export class RouteDispatcher {
         if (handler) {
             handler();
         } else {
-            console.log('No specific function for this path.');
+            window.debug.log('No specific function for this path.');
             // Default function or behavior for unspecified paths
         }
     }

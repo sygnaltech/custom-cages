@@ -70,7 +70,7 @@ export class WebflowInfoElement {
 
     this.infoElem = element; 
     this.default = element.textContent || '';
-console.log("default is", this.default)
+window.debug.log("default is", this.default)
     // Element is ready for modification
     this.valid = true; 
 
@@ -84,7 +84,7 @@ console.log("default is", this.default)
 
   set(text: string) {
 
-console.log("setting text", text); 
+window.debug.log("setting text", text); 
 
     this.infoElem.innerText = text;
 

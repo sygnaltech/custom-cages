@@ -88,7 +88,7 @@ export class WebflowDropdown {
 
   open(): void {
 
-    console.log("state", this.isOpen) 
+    window.debug.log("state", this.isOpen) 
 
 
     if (!this.isOpen) {
@@ -104,11 +104,11 @@ export class WebflowDropdown {
   }
 
   close(): void {
-    console.log("close handler")
-    console.log("state", this.isOpen) 
+    window.debug.log("close handler")
+    window.debug.log("state", this.isOpen) 
     // if (this.isOpen) {
     //   this.dropdownToggleElem.click();
-    //   console.log("clicked close"); 
+    //   window.debug.log("clicked close"); 
     // }
 
     if (this.isOpen) {
@@ -149,7 +149,7 @@ export class WebflowDropdown {
   static initWebflowJS() {
 
     // Re-initialize 
-//    console.log("re-initializing dropdowns"); 
+//    window.debug.log("re-initializing dropdowns"); 
 
     // re-initiate webflow ix2 
     // https://discourse.webflow.com/t/how-to-change-webflow-animation-properties-with-js/193404/2

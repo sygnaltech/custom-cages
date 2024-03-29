@@ -22,7 +22,7 @@
       if (handler) {
         handler();
       } else {
-        console.log("No specific function for this path.");
+        window.debug.log("No specific function for this path.");
       }
     }
   };

@@ -25,7 +25,7 @@ export class FilterPage {
 
   init() {
 
-    console.log("Filter page init."); 
+    window.debug.log("Filter page init."); 
 
     // Get info elements
     // TODO: Build as a central manager with an update overall function
@@ -41,7 +41,7 @@ export class FilterPage {
     if (dropdownElement) {
       // Element found, you can work with dropdownElement here
       this.modelDropdown = new WebflowDropdown(dropdownElement)
-    //  console.log('Dropdown element found:', dropdownElement);
+    //  window.debug.log('Dropdown element found:', dropdownElement);
     } else {
       console.error('Model dropdown element not found.');
     }
@@ -76,13 +76,13 @@ export class FilterPage {
     // Select all radio buttons within the .dyn-brand elements
     const radioButtons = document.querySelectorAll('.brands-menu .dyn-brand .w-form-formradioinput.radio-button') as NodeListOf<HTMLInputElement>;
     
-//    console.log("radio buttons", radioButtons); 
+//    window.debug.log("radio buttons", radioButtons); 
 
     // Add the change event listener to each rbn
     radioButtons.forEach((radioButton: HTMLInputElement) => {
         radioButton.addEventListener('change', (event: Event) => { 
 
-          console.log(`brand clicked`); 
+          window.debug.log(`brand clicked`); 
 
             // Cast the event target back to an input element to access 'checked'
             const target = event.target as HTMLInputElement;
@@ -92,7 +92,7 @@ export class FilterPage {
                 // Navigate to the sibling span to get the brand name
                 // Note: nextElementSibling could be null, so we check for it
                 const brandName: string | null = target.nextElementSibling ? target.nextElementSibling.textContent : '';
-                console.log("Brand selected:", brandName);
+                window.debug.log("Brand selected:", brandName);
                 // Perform your actions with the brandName here
               
                 if(!brandName) {
@@ -120,7 +120,7 @@ loadModels(make: string): void {
     // Normalize make to a slug-compatible identifier
     // Lowercase, spaces-to-hyphens
     make = make.toLowerCase().replace(/\s+/g, '-');
-//    console.log("MATCH TO", make);
+//    window.debug.log("MATCH TO", make);
   
     // Load data source "models"
     const modelsDataSourceElems: NodeListOf<HTMLElement> = 
@@ -145,11 +145,11 @@ loadModels(make: string): void {
           return;
 
         const matchMakeID = modelMake.textContent.trim().toLowerCase().replace(/\s+/g, '-');
-        console.log("matching", matchMakeID, make.toLowerCase());
+        window.debug.log("matching", matchMakeID, make.toLowerCase());
 
         if (matchMakeID === make.toLowerCase()) {
 
-          console.log("MATCHED")
+          window.debug.log("MATCHED")
 
           // If a matching model make is found, collect the model's name
           const modelNameElem: HTMLElement | null = modelType.querySelector('.model-name');
@@ -157,7 +157,7 @@ loadModels(make: string): void {
             let modelName: string = modelNameElem.textContent.trim(); 
             matchingModels.push(modelName);
             
-            console.log(modelName);
+            window.debug.log(modelName);
             
             // Create the model in its lists
             this.createModel(modelName);
@@ -167,7 +167,7 @@ loadModels(make: string): void {
     });
   
     // Re-initialize
-    console.log("re-initializing dropdowns"); 
+    window.debug.log("re-initializing dropdowns"); 
     WebflowDropdown.initWebflowJS();
 
     // re-initiate webflow ix2 
@@ -182,7 +182,7 @@ loadModels(make: string): void {
   
   // Create the model option in the Models select & dropdown 
   createModel(name: string): void {
-    console.log(`creating model - ${name}`);
+    window.debug.log(`creating model - ${name}`);
   
     // Assuming modelsSelectElem and modelsNavElem are already defined somewhere as HTMLElements
     // const modelsSelectElem: HTMLElement | null = document.querySelector('.models-select'); // Update selector as necessary
@@ -199,9 +199,9 @@ loadModels(make: string): void {
       // TypeScript knows modelsSelectElem is an HTMLElement, but we know it's more specific, a select element
       (modelsSelectElem as HTMLSelectElement).appendChild(option);
   
-      console.log('Model option created');
+      window.debug.log('Model option created');
     } else {
-      console.log('Select element not found');
+      window.debug.log('Select element not found');
     }
   
     // Create model in nav elem
@@ -216,7 +216,7 @@ loadModels(make: string): void {
   
       modelsNavElem.appendChild(linkElement);
   
-console.log("CREATING")
+window.debug.log("CREATING")
 
       linkElement.addEventListener('click', event => {
 //        event.preventDefault();
@@ -251,8 +251,8 @@ console.log("CREATING")
 
 
 
-    console.log ("selectModel select", modelsSelectElem); 
-    console.log(`selecting model - ${name}`);
+    window.debug.log ("selectModel select", modelsSelectElem); 
+    window.debug.log(`selecting model - ${name}`);
   
     // Display model name
     this.selectedModelName.set(name);
@@ -272,13 +272,13 @@ console.log("CREATING")
           modelsSelectElem.dispatchEvent(changeEvent);
   
           found = true;
-          console.log(`Model '${name}' selected.`);
+          window.debug.log(`Model '${name}' selected.`);
           break; // Exit the loop once the matching option is found
         }
       }
   
       if (!found) {
-        console.log(`Model '${name}' not found in the select options.`);
+        window.debug.log(`Model '${name}' not found in the select options.`);
       }
     } else {
       console.error('modelsSelectElem is not defined on window.');
@@ -302,13 +302,13 @@ console.log("CREATING")
     this.selectedModelName.clear();
 
 
-console.log ("Models select elem", modelsSelectElem); 
+window.debug.log ("Models select elem", modelsSelectElem); 
 
     if (modelsSelectElem) {
       // Clear all existing options
       modelsSelectElem.innerHTML = '';
 
-      console.log(modelsSelectElem.innerHTML);
+      window.debug.log(modelsSelectElem.innerHTML);
   
       // Create the new default option
       const defaultOption = document.createElement('option');
@@ -322,10 +322,10 @@ console.log ("Models select elem", modelsSelectElem);
 //      this.removeFilterTagByName("Model");
       FSFilterUtils.removeFilterTagByName("Model");
   
-      console.log('Models cleared');
+      window.debug.log('Models cleared');
   
     } else {
-      console.log('Select element not found');
+      window.debug.log('Select element not found');
     }
   
     if (modelsNavElem) {
@@ -345,7 +345,7 @@ console.log ("Models select elem", modelsSelectElem);
       modelsNavElem.appendChild(linkElement);
   
     } else {
-      console.log('Nav element not found');
+      window.debug.log('Nav element not found');
     }
   }
   

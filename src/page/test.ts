@@ -15,13 +15,13 @@ export class TestPage {
   
   init() {
 
-    console.log("Test page init."); 
+    window.debug.log("Test page init."); 
 
     const dropdownElement = document.querySelector('.select-model > .w-dropdown') as HTMLElement;
     if (dropdownElement) {
       // Element found, you can work with dropdownElement here
       this.modelDropdown = new WebflowDropdown(dropdownElement)
-    //  console.log('Dropdown element found:', dropdownElement);
+    //  window.debug.log('Dropdown element found:', dropdownElement);
     } else {
       console.error('Model dropdown element not found.');
     }
@@ -34,15 +34,15 @@ export class TestPage {
       const action = button.getAttribute('test');
       switch (action) {
         case 'open':
-          console.log('open')
+          window.debug.log('open')
           this.modelDropdown.open();
           break;
         case 'close':
-          console.log('close')
+          window.debug.log('close')
           this.modelDropdown.close();
           break;
         case 'toggle':
-          console.log('toggle')
+          window.debug.log('toggle')
           this.modelDropdown.isOpen ? this.modelDropdown.close() : this.modelDropdown.open();
           break;
         default:
