@@ -56,6 +56,10 @@
         }
       });
     }
+    static initWebflowJS() {
+      window.Webflow.require("dropdown").ready();
+      document.dispatchEvent(new Event("readystatechange"));
+    }
   };
 })();
 //# sourceMappingURL=dropdown.js.map

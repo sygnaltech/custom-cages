@@ -16,6 +16,7 @@
  * - Reset selection
  * - Add item, remove item
  * 
+ * sa-selectcustom-element = dropdown
  */
 
 import { WebflowDropdown } from "./dropdown";
@@ -32,6 +33,12 @@ export class CustomFormSelect extends WebflowDropdown {
   //   return this.dropdownListElem.classList.contains('w--open');
   // } 
 
+  // second DIV within toggle
+  // DIV - main > DIV.w-dropdown-toggle > second DIV
+  dropdownText: HTMLElement; // .w-dropdown-toggle
+
+  // One and only <select> within dropdown element
+  selectElem: HTMLSelectElement;
 
 
 

@@ -2,6 +2,7 @@
 /*
  * Webflow Dropdown Element
  * used to manipulate the element.  
+ * 
  */ 
 
 // TESTING:
@@ -142,6 +143,21 @@ export class WebflowDropdown {
           anchor.remove();
         }
       });
+
+  }
+
+  static initWebflowJS() {
+
+    // Re-initialize 
+//    console.log("re-initializing dropdowns"); 
+
+    // re-initiate webflow ix2 
+    // https://discourse.webflow.com/t/how-to-change-webflow-animation-properties-with-js/193404/2
+    // (window as any).Webflow && (window as any).Webflow.destroy();
+    // (window as any).Webflow && (window as any).Webflow.ready();
+//    (window as any).Webflow && (window as any).Webflow.require( 'ix2' ).init();
+    (window as any).Webflow.require('dropdown').ready(); 
+    document.dispatchEvent( new Event( 'readystatechange' ) );
 
   }
 

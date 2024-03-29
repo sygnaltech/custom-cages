@@ -1,7 +1,9 @@
 
 /*
  * Page | Filter 
+ *
  */
+
 import { WebflowDropdown } from "../dropdown";
 import { FSFilterUtils } from "../fs-filter-utils";
 import { WebflowInfoElement } from "../info";
@@ -26,6 +28,8 @@ export class FilterPage {
     console.log("Filter page init."); 
 
     // Get info elements
+    // TODO: Build as a central manager with an update overall function
+    // However this should be isolated separately in Custom Form Selects 
     this.selectedBrandName = new WebflowInfoElement("brand-name");
     this.selectedBrandName.init();
     this.selectedModelName = new WebflowInfoElement("model-name");
@@ -107,16 +111,10 @@ export class FilterPage {
     });
                   
   }
-
-
   
   
 
   
-  
-  
-  
-
 loadModels(make: string): void {
 
     // Normalize make to a slug-compatible identifier
@@ -170,14 +168,15 @@ loadModels(make: string): void {
   
     // Re-initialize
     console.log("re-initializing dropdowns"); 
+    WebflowDropdown.initWebflowJS();
 
     // re-initiate webflow ix2 
     // https://discourse.webflow.com/t/how-to-change-webflow-animation-properties-with-js/193404/2
     // (window as any).Webflow && (window as any).Webflow.destroy();
     // (window as any).Webflow && (window as any).Webflow.ready();
 //    (window as any).Webflow && (window as any).Webflow.require( 'ix2' ).init();
-    (window as any).Webflow.require('dropdown').ready(); 
-    document.dispatchEvent( new Event( 'readystatechange' ) );
+    // (window as any).Webflow.require('dropdown').ready(); 
+    // document.dispatchEvent( new Event( 'readystatechange' ) );
   
   }
   

@@ -4,6 +4,7 @@
  * 
  */
 
+import { Sa5Debug } from './debug';
 import { FilterPage } from './page/filter';
 import { TestPage } from './page/test';
 import { RouteDispatcher } from './routeDispatcher';
@@ -77,6 +78,8 @@ declare global {
     modelsDataSourceElems: NodeListOf<HTMLElement>;
     modelsSelectElem: HTMLElement | null;
     modelsNavElem: HTMLElement | null;
+
+    debug: Sa5Debug;
   }
 }
   
@@ -85,7 +88,10 @@ declare global {
 
 function init(): void {
 
-  console.log(`${SITE_NAME} package init ${VERSION}`);
+  window.debug = new Sa5Debug();
+  window.debug.enabled = true;
+
+  window.debug.log(`${SITE_NAME} package init ${VERSION}`);
 
   // (new Modal()).init();  
 
