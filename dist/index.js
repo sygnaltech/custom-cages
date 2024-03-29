@@ -402,7 +402,7 @@
 
   // src/index.ts
   var SITE_NAME = "CustomCages";
-  var VERSION = "v0.1.3";
+  var VERSION = "v0.1.4";
   window[SITE_NAME] = window[SITE_NAME] || {};
   var Rise = window[SITE_NAME];
   window.fsAttributes = window.fsAttributes || [];
@@ -419,7 +419,10 @@
   window.modelsNavElem = document.querySelector(".select-model nav");
   function init() {
     window.debug = new Sa5Debug();
-    window.debug.enabled = true;
+    if (window.location.hostname.endsWith("webflow.io"))
+      window.debug.enabled = true;
+    if (new URLSearchParams(window.location.search).has("debug"))
+      window.debug.enabled = true;
     window.debug.log(`${SITE_NAME} package init ${VERSION}`);
     var routeDispatcher = new RouteDispatcher();
     routeDispatcher.routes = {

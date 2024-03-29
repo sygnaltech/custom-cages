@@ -11,7 +11,7 @@ import { RouteDispatcher } from './routeDispatcher';
 
 // Global vars
 const SITE_NAME = 'CustomCages';
-const VERSION = 'v0.1.3';
+const VERSION = 'v0.1.4';
 
 // Global object
 window[SITE_NAME] = window[SITE_NAME] || {}; 
@@ -88,12 +88,29 @@ declare global {
 
 function init(): void {
 
+  /**
+   * Init debugging
+   */
+
   window.debug = new Sa5Debug(); 
-  window.debug.enabled = true;
+
+  // Enable if in a debug situation
+  if (window.location.hostname.endsWith("webflow.io"))
+    window.debug.enabled = true;
+  if (new URLSearchParams(window.location.search).has("debug")) 
+    window.debug.enabled = true;
+
+  /**
+   * Announce lib install
+   */
 
   window.debug.log(`${SITE_NAME} package init ${VERSION}`);
 
   // (new Modal()).init();  
+
+  /**
+   * Route requests, by path
+   */
 
   var routeDispatcher = new RouteDispatcher();
   routeDispatcher.routes = {
