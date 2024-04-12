@@ -67,6 +67,8 @@ export class FilterPage {
     
   }
 
+
+
   /**
    * Init brand radio buttons
    */
@@ -82,16 +84,20 @@ export class FilterPage {
     radioButtons.forEach((radioButton: HTMLInputElement) => {
         radioButton.addEventListener('change', (event: Event) => { 
 
-          window.debug.log(`brand clicked`); 
-
             // Cast the event target back to an input element to access 'checked'
             const target = event.target as HTMLInputElement;
+
+            window.debug.log(`brand clicked`, target); 
             
             // Check if the radio button is being selected
             if (target.checked) {
+
                 // Navigate to the sibling span to get the brand name
-                // Note: nextElementSibling could be null, so we check for it
-                const brandName: string | null = target.nextElementSibling ? target.nextElementSibling.textContent : '';
+                const brandNameElement: Element | null = this.findSiblingWithAttribute(target);
+
+                const brandName: string | null = brandNameElement ? brandNameElement.textContent : '';
+//                this.findSiblingWithAttribute(target)
+//                target.nextElementSibling ? target.nextElementSibling.textContent : '';
                 window.debug.log("Brand selected:", brandName);
                 // Perform your actions with the brandName here
               
@@ -366,5 +372,28 @@ window.debug.log ("Models select elem", modelsSelectElem);
   //     }
   //   });
   // }
+
+  /**
+   * Utility
+   */
+
+  // Locates the radio button label from the fs attribute 
+  findSiblingWithAttribute(target: Element): Element | null {
+    // Start with the next sibling of the target element
+    let sibling = target.nextElementSibling;
+
+    // Loop through the siblings until a match is found or no more siblings are left
+    while (sibling) {
+        // Check if this sibling has the specific attribute
+        if (sibling.getAttribute('fs-cmsfilter-tagcategory') !== null) {
+            return sibling; // Return the matching sibling element
+        }
+        // Move to the next sibling
+        sibling = sibling.nextElementSibling;
+    }
+
+    // If no matching sibling is found, return null
+    return null;
+``}  
 
 }

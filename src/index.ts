@@ -11,7 +11,7 @@ import { RouteDispatcher } from './routeDispatcher';
 
 // Global vars
 const SITE_NAME = 'CustomCages';
-const VERSION = 'v0.1.4';
+const VERSION = 'v0.1.5';
 
 // Global object
 window[SITE_NAME] = window[SITE_NAME] || {}; 

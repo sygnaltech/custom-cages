@@ -200,10 +200,11 @@
       const radioButtons = document.querySelectorAll(".brands-menu .dyn-brand .w-form-formradioinput.radio-button");
       radioButtons.forEach((radioButton) => {
         radioButton.addEventListener("change", (event) => {
-          window.debug.log(`brand clicked`);
           const target = event.target;
+          window.debug.log(`brand clicked`, target);
           if (target.checked) {
-            const brandName = target.nextElementSibling ? target.nextElementSibling.textContent : "";
+            const brandNameElement = this.findSiblingWithAttribute(target);
+            const brandName = brandNameElement ? brandNameElement.textContent : "";
             window.debug.log("Brand selected:", brandName);
             if (!brandName) {
               console.error("Brand name is null");
@@ -333,6 +334,17 @@
         window.debug.log("Nav element not found");
       }
     }
+    findSiblingWithAttribute(target) {
+      let sibling = target.nextElementSibling;
+      while (sibling) {
+        if (sibling.getAttribute("fs-cmsfilter-tagcategory") !== null) {
+          return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+      }
+      return null;
+      ``;
+    }
   };
 
   // src/page/test.ts
@@ -402,7 +414,7 @@
 
   // src/index.ts
   var SITE_NAME = "CustomCages";
-  var VERSION = "v0.1.4";
+  var VERSION = "v0.1.5";
   window[SITE_NAME] = window[SITE_NAME] || {};
   var Rise = window[SITE_NAME];
   window.fsAttributes = window.fsAttributes || [];
